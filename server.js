@@ -21,7 +21,7 @@ app.use(express.urlencoded({extended:true}));
 app.use(morgan("dev"));
 
 app.get("/api",(req,res)=>{
-    res.send("<h1>Restaurants near me api..</h1>");
+    res.send("<h1>Restaurants near me api..(with caching)</h1>");
 });
 
 app.use("/api/auth",authRouter);
