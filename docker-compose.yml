@@ -1,0 +1,34 @@
+version: '3.8'
+services:
+  redis:
+    image: redis:latest
+    container_name: redisContainer
+    ports:
+      - 6379
+    volumes:
+      - ./redis.conf:/usr/local/etc/redis/redis.conf
+    command: ["redis-server", "/usr/local/etc/redis/redis.conf"]
+    restart: unless-stopped
+    networks:
+      - my-network
+
+  restaurants-near-me-api-caching:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: witcheradi26/restaurants-near-me-api-caching
+    ports:
+      - "4000:4000"
+    depends_on:
+      - redis
+    networks:
+      - my-network
+    command: npm run server
+    restart: unless-stopped
+    volumes:
+      - .:/app
+      - /app/node_modules
+
+networks:
+  my-network:
+    driver: bridge
